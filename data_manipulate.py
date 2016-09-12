@@ -113,7 +113,7 @@ def train_sample_generate(cusI):
         print ind
     return [input0,label]
 
-for i in range(248,277):
+for i in range(25,26):
     [input_x,label_y] = test_sample_generate(i)
     str_tmp_x = './data/test_x_' + str(i) + '.csv'
     str_tmp_y = './data/test_y_' + str(i) + '.csv'
