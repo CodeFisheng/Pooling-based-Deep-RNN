@@ -13,7 +13,7 @@ import time
 import matplotlib.pyplot as pl
 
 time1 = time.time() # set up counter to record run time
-data_dir = './data/' # directory contains input data
+data_dir = '../../database/data/' # directory contains input data
 num_epoches = 50000 # training epoches for each customer samples
 n_steps = 48 # input size
 cus_num = 1

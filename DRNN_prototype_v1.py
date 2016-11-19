@@ -12,7 +12,7 @@ import math
 import time
 import matplotlib.pyplot as pl
 
-data_dir = './data/' # directory contains input data
+data_dir = '../../database/data/' # directory contains input data
 num_epoches = 5000 # training epoches for each customer samples
 n_steps = 48 # input size
 test_batch_size = 70*48 # days of a batch
