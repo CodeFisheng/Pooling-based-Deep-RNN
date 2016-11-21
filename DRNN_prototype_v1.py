@@ -19,7 +19,7 @@ test_batch_size = 70*48 # days of a batch
 train_batch_size = 2*48
 feature_size = 1 # same time of a week
 n_hidden = 30 # input size
-num_layers = 2
+num_layers = 3
 n_output = 1
 Rs = 20
 
@@ -92,12 +92,13 @@ optimizer = tf.train.RMSPropOptimizer(0.001, 0.9).minimize(cost)
 ## iterating among all customers to find current training customer
 #cus_list = [4,5,8,9]
 cus_count = 100
-cus_list = [3,10,11,19,28,30,32,57,96,97,98,100,125,131,133,134,153,164,177,179,184,202,205,215,231,237,243,246,253,256,261,264,269,291,312,314,339,342,344,362,381,387,417,421,429,431,432,454,460,465,471,472,486,491,502,511,513,514,519,542,553,565,579,588,592,599,602,607,619,624,637,646,658,662,667,668,671,677,679,683,704,705,708,710,714,728,746,749,786,819,822,833,840,847,850,851,853,854,878,899]
+cus_list = [3,10,11,19,28,30,32,57,96,97,98,100,125,131,133,134,153,164,177,179,184,202,205,215,231,237,243,246,253,256,261,264,269,291,312,314,339,342,344,362,381,387,417,421,429,431,432,454,460,465,471,472,486,491,502,511,513,514,519,542,553,565,579,588,592,599,602,607,619,624,637,646,658,662,667,668,671,677,679,683,704,705,708,710,714,728,742,744,784,814,823,834,840,847,850,851,853,854,878,899]
 time_record = np.zeros(cus_count)
 RList = np.zeros([(num_epoches/10),cus_count])
 rmseList = np.zeros([(num_epoches/10),cus_count])
 maxeList = np.zeros([(num_epoches/10),cus_count])
-for i in range(0,100):
+maxnor = 0.5
+for i in range(0,cus_count):
     time1 = time.time()
     print i
     outlist = np.zeros([(num_epoches/10),test_batch_size])
@@ -116,6 +117,10 @@ for i in range(0,100):
     train_x_data = tmp_data[:,1:]
     tmp_data = np.array(pd.read_csv(train_y_name,header = None))
     train_y_data = tmp_data[:,1:]
+    train_y_data = train_y_data/maxnor
+    test_x_data = test_x_data/maxnor
+    train_x_data = train_x_data/maxnor
+    test_y_data = test_y_data/maxnor
     #log them
     #test_x_data = np.log(test_x_data)
     #test_y_data = np.log(test_y_data)
@@ -178,6 +183,8 @@ for i in range(0,100):
             #    print ktmp
     time2 = time.time()
     time_record[i] = time2-time1
+    outlist = outlist*maxnor
+    test_y = test_y*maxnor
     ## evaluation
     for j in range(kind):
         out = np.array(outlist[j])
@@ -188,10 +195,10 @@ for i in range(0,100):
     
     ## serialize
     prefix = './pes-result/'
-    postfix = '-house-' + str(num_layers) + '-' + str(n_hidden) + '.csv'
+    postfix = '-house-' + str(num_layers) + '-' + str(n_hidden) + '-' + str(maxnor) + '.csv'
 DataFrame(RList).to_csv(prefix + 'R' + postfix)
 DataFrame(rmseList).to_csv(prefix + 'RMSE' + postfix)
 DataFrame(maxeList).to_csv(prefix + 'MAXE' + postfix)
-DataFrame(time_record).to_csv(prefix + 'TimeLog2.csv')
+DataFrame(time_record).to_csv(prefix + 'TimeLog.csv')
     
     
